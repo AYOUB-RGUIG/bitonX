@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bitonx-ai"
+version = "0.2.0"
+description = "BitonX Quant AI foundation"
+requires-python = ">=3.12"
+dependencies = [
+  "albumentations>=1.4",
+  "mlflow>=2.14",
+  "numpy>=2.0",
+  "onnxruntime>=1.18",
+  "opencv-python-headless>=4.10",
+  "pandas>=2.2",
+  "pillow>=10.4",
+  "pydantic>=2.8",
+  "pydantic-settings>=2.4",
+  "scikit-learn>=1.5",
+  "scipy>=1.14",
+  "torch>=2.4",
+  "torchvision>=0.19"
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.11",
+  "pytest>=8.3",
+  "pytest-cov>=5.0",
+  "ruff>=0.5"
+]
+
+[tool.setuptools.packages.find]
+include = ["bitonx_ai*"]
+

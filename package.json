@@ -1,0 +1,20 @@
+{
+  "name": "bitonx",
+  "private": true,
+  "version": "0.2.0",
+  "description": "BitonX Quant production foundation workspace",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @bitonx/frontend dev",
+    "build": "pnpm --filter @bitonx/frontend build",
+    "lint": "pnpm --filter @bitonx/frontend lint",
+    "format": "pnpm --filter @bitonx/frontend format",
+    "test": "pnpm --filter @bitonx/frontend test",
+    "typecheck": "pnpm --filter @bitonx/frontend typecheck"
+  }
+}
+

@@ -1,0 +1,36 @@
+{
+  "resultId": "66666666-6666-4666-8666-666666666666",
+  "trace": {
+    "sourceDrawingId": "33333333-3333-4333-8333-333333333333",
+    "sourceArtifactIds": ["44444444-4444-4444-8444-444444444444"],
+    "createdAt": "2026-07-20T12:01:00Z",
+    "pipelineStage": "ocr",
+    "producer": "ocr-worker",
+    "producerVersion": "0.3.0"
+  },
+  "guardrail": {
+    "producesFinalQuantities": false,
+    "quantityComputationAllowed": false
+  },
+  "items": [
+    {
+      "textId": "77777777-7777-4777-8777-777777777777",
+      "text": "Scale 1:100",
+      "kind": "scale",
+      "boundingBox": {
+        "x": 100,
+        "y": 80,
+        "width": 160,
+        "height": 32
+      },
+      "confidence": 0.92
+    }
+  ],
+  "scaleCandidates": [
+    {
+      "rawText": "Scale 1:100",
+      "confidence": 0.92
+    }
+  ]
+}
+

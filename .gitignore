@@ -179,3 +179,58 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Node / frontend
+node_modules/
+.next/
+out/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+*.tsbuildinfo
+
+# Package managers
+pnpm-lock.yaml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env.*
+!.env.example
+!backend/.env.example
+!frontend/.env.example
+!ai/.env.example
+
+# Runtime data
+logs/
+tmp/
+storage/
+minio-data/
+postgres-data/
+neo4j-data/
+rabbitmq-data/
+redis-data/
+grafana-data/
+prometheus-data/
+loki-data/
+mlruns/
+mlartifacts/
+
+# AI artifacts and datasets
+datasets/raw/**
+datasets/processed/**
+datasets/cache/**
+datasets/exports/**
+ai/checkpoints/**
+ai/weights/**
+ai/models/**
+ai/experiments/**
+!datasets/raw/.gitkeep
+!datasets/processed/.gitkeep
+!datasets/cache/.gitkeep
+!datasets/exports/.gitkeep
+!ai/checkpoints/.gitkeep
+!ai/weights/.gitkeep
+!ai/models/.gitkeep
+!ai/experiments/.gitkeep

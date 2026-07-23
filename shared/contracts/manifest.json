@@ -1,0 +1,155 @@
+{
+  "name": "bitonx-engineering-intelligence-pipeline",
+  "version": "0.3.0",
+  "product": "BitonX Quant",
+  "architecture": "engineering-intelligence-platform",
+  "mandatoryConstraint": {
+    "bitonxIsOcrApplication": false,
+    "aiProducesFinalQuantities": false,
+    "llmMayCalculateQuantities": false,
+    "deepLearningMayEstimateQuantities": false,
+    "deepLearningAllowedFor": ["visual_understanding"],
+    "finalQuantitiesComputedBy": ["engineering_rule_engine", "formula_engine"],
+    "quantityProperties": ["explainable", "reproducible", "traceable", "deterministic"]
+  },
+  "pipeline": [
+    {
+      "order": 1,
+      "id": "drawing",
+      "name": "Drawing",
+      "kind": "input",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 2,
+      "id": "image_enhancement",
+      "name": "Image Enhancement",
+      "kind": "ai_perception",
+      "aiAllowed": true,
+      "deterministic": false,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 3,
+      "id": "ocr",
+      "name": "OCR",
+      "kind": "ai_perception",
+      "aiAllowed": true,
+      "deterministic": false,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 4,
+      "id": "object_detection",
+      "name": "Object Detection",
+      "kind": "ai_perception",
+      "aiAllowed": true,
+      "deterministic": false,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 5,
+      "id": "semantic_segmentation",
+      "name": "Semantic Segmentation",
+      "kind": "ai_perception",
+      "aiAllowed": true,
+      "deterministic": false,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 6,
+      "id": "vectorization",
+      "name": "Vectorization",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 7,
+      "id": "geometry_reconstruction",
+      "name": "Geometry Reconstruction",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 8,
+      "id": "engineering_graph_construction",
+      "name": "Engineering Graph Construction",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 9,
+      "id": "engineering_rule_engine",
+      "name": "Engineering Rule Engine",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 10,
+      "id": "formula_engine",
+      "name": "Formula Engine",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 11,
+      "id": "quantity_takeoff",
+      "name": "Quantity Takeoff",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": true
+    },
+    {
+      "order": 12,
+      "id": "cost_estimation",
+      "name": "Cost Estimation",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 13,
+      "id": "boq_generation",
+      "name": "BOQ Generation",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    },
+    {
+      "order": 14,
+      "id": "report_generation",
+      "name": "Report Generation",
+      "kind": "deterministic_engineering",
+      "aiAllowed": false,
+      "deterministic": true,
+      "mayProduceFinalQuantity": false
+    }
+  ],
+  "requiredTraceability": [
+    "sourceDrawingId",
+    "sourceArtifactIds",
+    "geometryEntityIds",
+    "engineeringRuleResultIds",
+    "formulaExecutionIds",
+    "intermediateValues",
+    "units",
+    "validationStatus",
+    "assumptions"
+  ]
+}
+

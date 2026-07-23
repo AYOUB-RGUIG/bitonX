@@ -1,0 +1,23 @@
+{
+  "reportId": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+  "trace": {
+    "sourceDrawingId": "33333333-3333-4333-8333-333333333333",
+    "sourceArtifactIds": ["ffffffff-ffff-4fff-8fff-ffffffffffff"],
+    "createdAt": "2026-07-20T12:20:00Z",
+    "pipelineStage": "report_generation",
+    "producer": "report-worker",
+    "producerVersion": "0.3.0"
+  },
+  "deterministic": true,
+  "reportType": "json",
+  "artifacts": [
+    {
+      "artifactId": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "kind": "report",
+      "uri": "s3://bitonx-reports/project/report.json",
+      "checksum": "sha256:example"
+    }
+  ],
+  "includedResultIds": ["88888888-8888-4888-8888-888888888888"]
+}
+

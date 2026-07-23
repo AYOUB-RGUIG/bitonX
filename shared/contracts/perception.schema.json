@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.bitonx.local/perception.schema.json",
+  "title": "BitonX AI Perception Contracts",
+  "type": "object",
+  "$defs": {
+    "ImageEnhancementResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "guardrail", "enhancedArtifacts"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "guardrail": { "$ref": "common.schema.json#/$defs/NoFinalQuantityGuardrail" },
+        "enhancedArtifacts": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ArtifactRef" }
+        },
+        "rotationDegrees": { "type": "number" },
+        "dpi": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "OcrTextItem": {
+      "type": "object",
+      "required": ["textId", "text", "boundingBox", "confidence"],
+      "properties": {
+        "textId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "text": { "type": "string" },
+        "kind": {
+          "type": "string",
+          "enum": ["room_label", "dimension", "scale", "title", "note", "grid_label", "symbol_text", "unknown"]
+        },
+        "boundingBox": { "$ref": "common.schema.json#/$defs/BoundingBox" },
+        "confidence": { "$ref": "common.schema.json#/$defs/Confidence" }
+      },
+      "additionalProperties": false
+    },
+    "OcrResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "guardrail", "items"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "guardrail": { "$ref": "common.schema.json#/$defs/NoFinalQuantityGuardrail" },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/OcrTextItem" }
+        },
+        "scaleCandidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["rawText", "confidence"],
+            "properties": {
+              "rawText": { "type": "string", "minLength": 1 },
+              "confidence": { "$ref": "common.schema.json#/$defs/Confidence" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DetectedObject": {
+      "type": "object",
+      "required": ["objectId", "objectType", "boundingBox", "confidence"],
+      "properties": {
+        "objectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "objectType": {
+          "type": "string",
+          "enum": ["wall", "door", "window", "column", "beam", "slab", "stair", "room", "dimension", "text", "symbol", "furniture", "plumbing", "electrical", "opening", "unknown"]
+        },
+        "boundingBox": { "$ref": "common.schema.json#/$defs/BoundingBox" },
+        "confidence": { "$ref": "common.schema.json#/$defs/Confidence" }
+      },
+      "additionalProperties": false
+    },
+    "DetectionResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "guardrail", "objects"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "guardrail": { "$ref": "common.schema.json#/$defs/NoFinalQuantityGuardrail" },
+        "modelName": { "type": "string" },
+        "modelVersion": { "type": "string" },
+        "objects": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/DetectedObject" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SegmentationMask": {
+      "type": "object",
+      "required": ["maskId", "objectId", "className", "artifact", "confidence"],
+      "properties": {
+        "maskId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "objectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "className": { "type": "string", "minLength": 1 },
+        "artifact": { "$ref": "common.schema.json#/$defs/ArtifactRef" },
+        "confidence": { "$ref": "common.schema.json#/$defs/Confidence" }
+      },
+      "additionalProperties": false
+    },
+    "SegmentationResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "guardrail", "masks"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "guardrail": { "$ref": "common.schema.json#/$defs/NoFinalQuantityGuardrail" },
+        "modelName": { "type": "string" },
+        "modelVersion": { "type": "string" },
+        "masks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/SegmentationMask" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

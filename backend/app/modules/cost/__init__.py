@@ -1,0 +1,2 @@
+"""Cost module boundary."""
+

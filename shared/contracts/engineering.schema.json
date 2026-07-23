@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.bitonx.local/engineering.schema.json",
+  "title": "BitonX Deterministic Engineering Contracts",
+  "type": "object",
+  "$defs": {
+    "VectorEntity": {
+      "type": "object",
+      "required": ["vectorId", "sourceObjectIds", "geometry"],
+      "properties": {
+        "vectorId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "sourceObjectIds": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "geometry": { "$ref": "common.schema.json#/$defs/Polygon" },
+        "method": { "type": "string", "enum": ["mask_polygonization", "line_tracing", "manual_correction"] }
+      },
+      "additionalProperties": false
+    },
+    "VectorizationResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "entities", "deterministic"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/VectorEntity" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GeometryEntity": {
+      "type": "object",
+      "required": ["geometryId", "entityType", "sourceVectorIds", "geometry", "unit"],
+      "properties": {
+        "geometryId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "entityType": {
+          "type": "string",
+          "enum": ["room", "wall", "door", "window", "opening", "column", "stair", "floor", "ceiling"]
+        },
+        "sourceVectorIds": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "geometry": { "$ref": "common.schema.json#/$defs/Polygon" },
+        "unit": { "$ref": "common.schema.json#/$defs/Unit" },
+        "length": { "type": "number", "minimum": 0 },
+        "area": { "type": "number", "minimum": 0 },
+        "perimeter": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "GeometryResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "entities", "validationMessages"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "entities": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GeometryEntity" }
+        },
+        "validationMessages": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ValidationMessage" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GraphNode": {
+      "type": "object",
+      "required": ["nodeId", "nodeType", "geometryId"],
+      "properties": {
+        "nodeId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "nodeType": {
+          "type": "string",
+          "enum": ["building", "floor", "room", "wall", "door", "window", "opening", "column", "material", "quantity", "cost"]
+        },
+        "geometryId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": false
+    },
+    "GraphEdge": {
+      "type": "object",
+      "required": ["edgeId", "sourceNodeId", "targetNodeId", "relationship"],
+      "properties": {
+        "edgeId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "sourceNodeId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "targetNodeId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "relationship": {
+          "type": "string",
+          "enum": ["contains", "inside", "connected_to", "adjacent_to", "intersects", "has_opening", "uses", "generates"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "EngineeringGraphResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "nodes", "edges"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GraphNode" }
+        },
+        "edges": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GraphEdge" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "EngineeringRuleResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "ruleId", "ruleVersion", "status", "sourceGeometryIds"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "ruleId": { "type": "string", "minLength": 1 },
+        "ruleVersion": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "common.schema.json#/$defs/ValidationStatus" },
+        "sourceGeometryIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "messages": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ValidationMessage" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "FormulaExecution": {
+      "type": "object",
+      "required": ["formulaExecutionId", "formulaId", "formulaVersion", "sourceGeometryIds", "inputValues", "intermediateValues", "resultValue", "resultUnit", "deterministic"],
+      "properties": {
+        "formulaExecutionId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "formulaId": { "type": "string", "minLength": 1 },
+        "formulaVersion": { "type": "string", "minLength": 1 },
+        "sourceGeometryIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "inputValues": { "type": "object" },
+        "intermediateValues": { "type": "object" },
+        "resultValue": { "type": "number" },
+        "resultUnit": { "$ref": "common.schema.json#/$defs/Unit" },
+        "deterministic": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "FormulaResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "executions"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "executions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/FormulaExecution" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "QuantityItem": {
+      "type": "object",
+      "required": ["quantityId", "quantityType", "value", "unit", "sourceGeometryIds", "engineeringRuleResultIds", "formulaExecutionId", "producerKind", "explainability"],
+      "properties": {
+        "quantityId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "quantityType": {
+          "type": "string",
+          "enum": ["length", "area", "volume", "surface_area", "material_quantity", "count"]
+        },
+        "value": { "type": "number" },
+        "unit": { "$ref": "common.schema.json#/$defs/Unit" },
+        "sourceGeometryIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "engineeringRuleResultIds": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        },
+        "formulaExecutionId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "producerKind": { "const": "deterministic_formula_engine" },
+        "explainability": {
+          "type": "object",
+          "required": ["formulaId", "formulaVersion", "intermediateValues", "assumptions"],
+          "properties": {
+            "formulaId": { "type": "string", "minLength": 1 },
+            "formulaVersion": { "type": "string", "minLength": 1 },
+            "intermediateValues": { "type": "object" },
+            "assumptions": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "QuantityTakeoffResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "items", "validationMessages"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/QuantityItem" }
+        },
+        "validationMessages": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ValidationMessage" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

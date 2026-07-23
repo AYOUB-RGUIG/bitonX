@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.bitonx.local/common.schema.json",
+  "title": "BitonX Common Contract Primitives",
+  "type": "object",
+  "$defs": {
+    "Uuid": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "PipelineStage": {
+      "type": "string",
+      "enum": [
+        "drawing",
+        "image_enhancement",
+        "ocr",
+        "object_detection",
+        "semantic_segmentation",
+        "vectorization",
+        "geometry_reconstruction",
+        "engineering_graph_construction",
+        "engineering_rule_engine",
+        "formula_engine",
+        "quantity_takeoff",
+        "cost_estimation",
+        "boq_generation",
+        "report_generation"
+      ]
+    },
+    "StageKind": {
+      "type": "string",
+      "enum": ["input", "ai_perception", "deterministic_engineering"]
+    },
+    "JobStatus": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "queued",
+        "running",
+        "succeeded",
+        "failed",
+        "canceled",
+        "retrying",
+        "partial_success",
+        "needs_review"
+      ]
+    },
+    "ValidationStatus": {
+      "type": "string",
+      "enum": ["valid", "invalid", "warning", "needs_review", "not_applicable"]
+    },
+    "ArtifactKind": {
+      "type": "string",
+      "enum": [
+        "source_drawing",
+        "normalized_image",
+        "enhanced_image",
+        "ocr_json",
+        "detection_json",
+        "segmentation_mask",
+        "vector_geometry",
+        "geometry_json",
+        "engineering_graph",
+        "rule_result",
+        "formula_result",
+        "quantity_takeoff",
+        "cost_estimate",
+        "boq",
+        "report"
+      ]
+    },
+    "Unit": {
+      "type": "string",
+      "enum": ["mm", "cm", "m", "km", "in", "ft", "m2", "ft2", "m3", "ft3", "kg", "ton", "l", "ml", "unit"]
+    },
+    "Currency": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 3
+    },
+    "Confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "Point2D": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "BoundingBox": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "minimum": 0 },
+        "height": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "Polygon": {
+      "type": "object",
+      "required": ["points"],
+      "properties": {
+        "points": {
+          "type": "array",
+          "minItems": 3,
+          "items": { "$ref": "#/$defs/Point2D" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArtifactRef": {
+      "type": "object",
+      "required": ["artifactId", "kind", "uri"],
+      "properties": {
+        "artifactId": { "$ref": "#/$defs/Uuid" },
+        "kind": { "$ref": "#/$defs/ArtifactKind" },
+        "uri": { "type": "string", "minLength": 1 },
+        "checksum": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ValidationMessage": {
+      "type": "object",
+      "required": ["code", "message", "status"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/ValidationStatus" },
+        "sourceId": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "TraceMetadata": {
+      "type": "object",
+      "required": ["sourceDrawingId", "sourceArtifactIds", "createdAt"],
+      "properties": {
+        "sourceDrawingId": { "$ref": "#/$defs/Uuid" },
+        "sourceArtifactIds": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Uuid" }
+        },
+        "createdAt": { "$ref": "#/$defs/Timestamp" },
+        "pipelineStage": { "$ref": "#/$defs/PipelineStage" },
+        "producer": { "type": "string", "minLength": 1 },
+        "producerVersion": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "NoFinalQuantityGuardrail": {
+      "type": "object",
+      "required": ["producesFinalQuantities", "quantityComputationAllowed"],
+      "properties": {
+        "producesFinalQuantities": { "const": false },
+        "quantityComputationAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

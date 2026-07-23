@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.bitonx.local/reporting.schema.json",
+  "title": "BitonX Cost, BOQ, and Reporting Contracts",
+  "type": "object",
+  "$defs": {
+    "CostLine": {
+      "type": "object",
+      "required": ["costLineId", "quantityId", "description", "quantity", "unit", "unitPrice", "currency", "totalPrice"],
+      "properties": {
+        "costLineId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "quantityId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "description": { "type": "string", "minLength": 1 },
+        "quantity": { "type": "number" },
+        "unit": { "$ref": "common.schema.json#/$defs/Unit" },
+        "unitPrice": { "type": "number", "minimum": 0 },
+        "currency": { "$ref": "common.schema.json#/$defs/Currency" },
+        "totalPrice": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "CostEstimateResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "currency", "lines", "totalCost"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "currency": { "$ref": "common.schema.json#/$defs/Currency" },
+        "lines": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/CostLine" }
+        },
+        "totalCost": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "BoqLine": {
+      "type": "object",
+      "required": ["boqLineId", "itemCode", "description", "quantityId", "quantity", "unit"],
+      "properties": {
+        "boqLineId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "itemCode": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "quantityId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "quantity": { "type": "number" },
+        "unit": { "$ref": "common.schema.json#/$defs/Unit" },
+        "costLineId": { "$ref": "common.schema.json#/$defs/Uuid" }
+      },
+      "additionalProperties": false
+    },
+    "BoqResult": {
+      "type": "object",
+      "required": ["resultId", "trace", "deterministic", "lines"],
+      "properties": {
+        "resultId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "lines": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/BoqLine" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ReportResult": {
+      "type": "object",
+      "required": ["reportId", "trace", "deterministic", "reportType", "artifacts", "includedResultIds"],
+      "properties": {
+        "reportId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "trace": { "$ref": "common.schema.json#/$defs/TraceMetadata" },
+        "deterministic": { "const": true },
+        "reportType": { "type": "string", "enum": ["json", "csv", "excel", "pdf"] },
+        "artifacts": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ArtifactRef" }
+        },
+        "includedResultIds": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/Uuid" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

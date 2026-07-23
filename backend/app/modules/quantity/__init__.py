@@ -1,0 +1,2 @@
+"""Quantity module boundary."""
+

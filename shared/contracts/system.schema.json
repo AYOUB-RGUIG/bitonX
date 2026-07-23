@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.bitonx.local/system.schema.json",
+  "title": "BitonX System Contracts",
+  "type": "object",
+  "$defs": {
+    "Project": {
+      "type": "object",
+      "required": ["projectId", "ownerId", "name", "status", "createdAt"],
+      "properties": {
+        "projectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "ownerId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "name": { "type": "string", "minLength": 1 },
+        "status": { "type": "string", "enum": ["draft", "active", "archived", "deleted"] },
+        "createdAt": { "$ref": "common.schema.json#/$defs/Timestamp" },
+        "updatedAt": { "$ref": "common.schema.json#/$defs/Timestamp" }
+      },
+      "additionalProperties": false
+    },
+    "UploadedFile": {
+      "type": "object",
+      "required": ["uploadId", "projectId", "filename", "mimeType", "sizeBytes", "checksum", "artifact"],
+      "properties": {
+        "uploadId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "projectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "filename": { "type": "string", "minLength": 1 },
+        "mimeType": { "type": "string", "enum": ["application/pdf", "image/png", "image/jpeg"] },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "checksum": { "type": "string", "minLength": 1 },
+        "pageCount": { "type": "integer", "minimum": 1 },
+        "artifact": { "$ref": "common.schema.json#/$defs/ArtifactRef" },
+        "uploadedAt": { "$ref": "common.schema.json#/$defs/Timestamp" }
+      },
+      "additionalProperties": false
+    },
+    "Artifact": {
+      "type": "object",
+      "required": ["artifactId", "projectId", "kind", "uri", "createdAt"],
+      "properties": {
+        "artifactId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "projectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "kind": { "$ref": "common.schema.json#/$defs/ArtifactKind" },
+        "uri": { "type": "string", "minLength": 1 },
+        "contentType": { "type": "string" },
+        "checksum": { "type": "string" },
+        "createdAt": { "$ref": "common.schema.json#/$defs/Timestamp" }
+      },
+      "additionalProperties": false
+    },
+    "PipelineJob": {
+      "type": "object",
+      "required": ["jobId", "projectId", "stage", "status", "inputArtifacts", "outputArtifacts"],
+      "properties": {
+        "jobId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "projectId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "uploadId": { "$ref": "common.schema.json#/$defs/Uuid" },
+        "stage": { "$ref": "common.schema.json#/$defs/PipelineStage" },
+        "status": { "$ref": "common.schema.json#/$defs/JobStatus" },
+        "inputArtifacts": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ArtifactRef" }
+        },
+        "outputArtifacts": {
+          "type": "array",
+          "items": { "$ref": "common.schema.json#/$defs/ArtifactRef" }
+        },
+        "startedAt": { "$ref": "common.schema.json#/$defs/Timestamp" },
+        "finishedAt": { "$ref": "common.schema.json#/$defs/Timestamp" },
+        "errorCode": { "type": "string" },
+        "errorMessage": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ApiError": {
+      "type": "object",
+      "required": ["code", "message", "requestId"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "requestId": { "type": "string", "minLength": 1 },
+        "details": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+coverage
+dist
+build
+datasets/raw
+datasets/processed
+datasets/cache
+ai/checkpoints
+ai/weights
+ai/models
+ai/experiments
+
