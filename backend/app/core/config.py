@@ -25,11 +25,19 @@ class Settings(BaseSettings):
         alias="RABBITMQ_URL",
     )
     minio_endpoint: str = Field(default="localhost:9000", alias="MINIO_ENDPOINT")
+    minio_access_key: str = Field(default="bitonx", alias="MINIO_ROOT_USER")
+    minio_secret_key: str = Field(default="bitonx_dev_password", alias="MINIO_ROOT_PASSWORD")
+    minio_secure: bool = Field(default=False, alias="MINIO_SECURE")
+    minio_bucket_uploads: str = Field(default="bitonx-uploads", alias="MINIO_BUCKET_UPLOADS")
+    minio_bucket_artifacts: str = Field(default="bitonx-artifacts", alias="MINIO_BUCKET_ARTIFACTS")
+    minio_bucket_reports: str = Field(default="bitonx-reports", alias="MINIO_BUCKET_REPORTS")
+    max_upload_size_bytes: int = Field(default=104_857_600, alias="MAX_UPLOAD_SIZE_BYTES")
     jwt_secret_key: str = Field(default="change-me-in-real-environments", alias="JWT_SECRET_KEY")
+    jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(default=30, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
 
 
 @lru_cache
 def get_settings() -> Settings:
     """Return cached backend settings."""
     return Settings()
-
